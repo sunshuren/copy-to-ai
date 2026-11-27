@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "AI Relay",
+  "version": "0.6.0",
+  "description": "复制网页选中文字或正文。含图内容可导出 PDF，支持手动粘贴给 AI。",
+  "permissions": [
+    "clipboardWrite",
+    "scripting",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_title": "复制给AI"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "js": [
+        "jspdf.js",
+        "chatgpt.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "reply.ttf"
+      ],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    }
+  ]
+}
