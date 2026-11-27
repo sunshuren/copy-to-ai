@@ -13,8 +13,8 @@ $csc = Join-Path $env:WINDIR 'Microsoft.NET\Framework\v4.0.30319\csc.exe'
 & $csc /nologo /target:exe "/out:$exe" /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll $sourcePath
 if ($LASTEXITCODE) { throw 'Unable to build PDF clipboard helper.' }
 $manifest = Join-Path $dir 'host.json'
-$config = @{ name='local.airelay.pdfclipboard'; description='AI Relay PDF clipboard'; path=$exe; type='stdio'; allowed_origins=@("chrome-extension://$ExtensionId/") }
+$config = @{ name='local.airelay.pdfclipboard'; description='Copy to AI PDF clipboard'; path=$exe; type='stdio'; allowed_origins=@("chrome-extension://$ExtensionId/") }
 [IO.File]::WriteAllText($manifest, ($config | ConvertTo-Json))
 $vendor = if ($Browser -eq 'Edge') {'Microsoft\Edge'} else {'Google\Chrome'}
 (New-Item -Force "HKCU:\Software\$vendor\NativeMessagingHosts\local.airelay.pdfclipboard").SetValue('',$manifest)
-Write-Host "AI Relay clipboard helper registered for $Browser."
+Write-Host "Copy to AI clipboard helper registered for $Browser."

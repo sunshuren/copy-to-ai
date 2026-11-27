@@ -51,7 +51,7 @@
   const fromClaude = location.hostname === 'claude.ai';
   const generic = !fromClaude && !['chatgpt.com', 'chat.openai.com'].includes(location.hostname);
   const destination = generic ? 'AI' : fromClaude ? 'ChatGPT' : 'Claude';
-  const label = generic ? '复制给AI' : fromClaude ? '复制到chatgpt' : '复制给claude';
+  const label = generic ? '复制给 AI' : fromClaude ? '复制到chatgpt' : '复制给claude';
 
   async function renderImage(img) {
     await img.decode();
@@ -119,10 +119,10 @@
     const encoded = pdf.output('datauristring').split(',')[1];
     try {
       const result = await chrome.runtime.sendMessage({type:'AI_RELAY_COPY_PDF', pdf:encoded});
-      if (!result?.ok) console.warn('AI Relay',result?.error || '本地助手未确认复制');
+      if (!result?.ok) console.warn('Copy to AI',result?.error || '本地助手未确认复制');
       if (result?.ok) return 'PDF 文件已复制，去 ' + destination + ' 按 Ctrl+V 粘贴。';
     } catch (error) {
-      console.warn('AI Relay', error);
+      console.warn('Copy to AI', error);
     }
     pdf.save('ChatGPT-图文回复-' + Date.now() + '.pdf');
     return 'PDF 未写入剪贴板，已改为下载，可作为附件拖入对话。';
@@ -207,7 +207,7 @@
     try {
       notice(await writeReply(message));
     } catch (error) {
-      console.warn('AI Relay', error);
+      console.warn('Copy to AI', error);
       notice('复制失败，请确认图片已加载后重试。');
     } finally {
       copying = false;

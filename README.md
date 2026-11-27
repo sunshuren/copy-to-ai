@@ -1,10 +1,10 @@
-# AI Relay · 复制给AI
+# Copy to AI · 复制给 AI
 
 浏览网页时，点一次复制，在 AI 对话里手动粘贴。
 
 | 页面 | 按钮 | 复制范围 |
 | --- | --- | --- |
-| 普通网页 | 复制给AI | 选中文字时只复制选区，否则复制文章或页面主体 |
+| 普通网页 | 复制给 AI | 选中文字时只复制选区，否则复制文章或页面主体 |
 | ChatGPT | 复制给claude | 按钮所在的助手回复 |
 | Claude | 复制到chatgpt | 按钮所在的助手回复 |
 
@@ -12,13 +12,13 @@
 
 ## 安装浏览器扩展
 
-1. 从 [Releases](https://github.com/sunshuren/ai-relay/releases) 下载 ZIP 并解压，或克隆本仓库。
+1. 从 [Releases](https://github.com/sunshuren/copy-to-ai/releases) 下载 ZIP 并解压，或克隆本仓库。
 2. 在 Edge 打开 `edge://extensions`，在 Chrome 打开 `chrome://extensions`。打开开发者模式，选择「加载已解压的扩展程序」，选解压目录中的 **extension** 文件夹。
-3. 刷新原先打开的网页。普通网页的「复制给AI」在右下角。浏览器内置页面、扩展商店和浏览器限制注入的页面不支持此按钮。
+3. 刷新原先打开的网页。普通网页的「复制给 AI」在右下角。浏览器内置页面、扩展商店和浏览器限制注入的页面不支持此按钮。
 
 ## Windows 文件粘贴（可选）
 
-从扩展管理页复制 AI Relay 的 32 位扩展 ID。在解压目录打开 PowerShell，运行下列命令，把示例的占位文字换成实际 ID。Chrome 用户把 Edge 换成 Chrome。
+从扩展管理页复制 Copy to AI 的 32 位扩展 ID。在解压目录打开 PowerShell，运行下列命令，把示例的占位文字换成实际 ID。Chrome 用户把 Edge 换成 Chrome。
 
 ```powershell
 .\windows\install.ps1 -ExtensionId '你的扩展ID' -Browser Edge

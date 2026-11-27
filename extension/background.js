@@ -4,7 +4,7 @@ chrome.action.onClicked.addListener(async tab => {
   try {
     try {await chrome.tabs.sendMessage(tab.id,{type:'AI_RELAY_LATEST'});}
     catch {await chrome.scripting.executeScript({target:{tabId:tab.id},files:['jspdf.js','chatgpt.js']}); await chrome.tabs.sendMessage(tab.id,{type:'AI_RELAY_LATEST'});}
-  } catch (e) {console.warn('AI Relay',e);}
+  } catch (e) {console.warn('Copy to AI',e);}
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, reply) => {
