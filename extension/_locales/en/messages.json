@@ -78,5 +78,23 @@
   },
   "pageHint": {
     "message": "Copy the selection or the main content of this page."
+  },
+  "button_idle": {
+    "message": "Ready"
+  },
+  "button_copying": {
+    "message": "Copying…"
+  },
+  "button_pdfCopied": {
+    "message": "✓ PDF copied"
+  },
+  "button_textCopied": {
+    "message": "✓ Text copied"
+  },
+  "button_downloaded": {
+    "message": "↓ PDF downloaded"
+  },
+  "button_failed": {
+    "message": "Copy failed · Retry"
   }
 }

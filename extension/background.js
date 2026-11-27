@@ -3,7 +3,7 @@ chrome.action.onClicked.addListener(async tab => {
   if (!isSupported(tab.url)) return;
   try {
     try {await chrome.tabs.sendMessage(tab.id,{type:'AI_RELAY_LATEST'});}
-    catch {await chrome.scripting.executeScript({target:{tabId:tab.id},files:['jspdf.js','chatgpt.js']}); await chrome.tabs.sendMessage(tab.id,{type:'AI_RELAY_LATEST'});}
+    catch {await chrome.scripting.insertCSS({target:{tabId:tab.id},files:['feedback.css']}); await chrome.scripting.executeScript({target:{tabId:tab.id},files:['jspdf.js','chatgpt.js']}); await chrome.tabs.sendMessage(tab.id,{type:'AI_RELAY_LATEST'});}
   } catch (e) {console.warn('Copy to AI',e);}
 });
 

@@ -78,5 +78,23 @@
   },
   "pageHint": {
     "message": "複製選取的文字或網頁主要內容。"
+  },
+  "button_idle": {
+    "message": "尚未複製"
+  },
+  "button_copying": {
+    "message": "複製中…"
+  },
+  "button_pdfCopied": {
+    "message": "✓ PDF 已複製"
+  },
+  "button_textCopied": {
+    "message": "✓ 文字已複製"
+  },
+  "button_downloaded": {
+    "message": "↓ 已下載 PDF"
+  },
+  "button_failed": {
+    "message": "複製失敗 · 重試"
   }
 }

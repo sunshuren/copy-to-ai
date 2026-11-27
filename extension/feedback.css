@@ -1,0 +1,31 @@
+.ai-relay-send-button[data-copy-state] {
+  gap: .5em;
+  white-space: nowrap;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.ai-relay-idle { font-size: .85em; opacity: .78; }
+.ai-relay-send-button[data-copy-state]:not([data-copy-state="idle"]) {
+  color: white !important;
+  border-color: transparent !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+.ai-relay-send-button[data-copy-state="copying"] { background: #194f9b !important; cursor: progress !important; }
+.ai-relay-send-button[data-copy-state="pdfCopied"],
+.ai-relay-send-button[data-copy-state="textCopied"] { background: #176543 !important; }
+.ai-relay-send-button[data-copy-state="downloaded"] { background: #805212 !important; }
+.ai-relay-send-button[data-copy-state="failed"] { background: #a52c38 !important; }
+.ai-relay-spinner {
+  display: inline-block;
+  width: .85em;
+  height: .85em;
+  border: 2px solid rgba(255,255,255,.45);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: ai-relay-spin .7s linear infinite;
+}
+@keyframes ai-relay-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .ai-relay-spinner { animation: none; }
+  .ai-relay-send-button[data-copy-state] { transition: none; }
+}

@@ -121,12 +121,12 @@
     try {
       const result = await chrome.runtime.sendMessage({type:'AI_RELAY_COPY_PDF', pdf:encoded});
       if (!result?.ok) console.warn('Copy to AI',result?.error || tr('hostError'));
-      if (result?.ok) return tr('pdfCopied', destination);
+      if (result?.ok) return 'pdfCopied';
     } catch (error) {
       console.warn('Copy to AI', error);
     }
     pdf.save(tr('downloadName') + '-' + Date.now() + '.pdf');
-    return tr('downloaded');
+    return 'downloaded';
   }
 
   async function copyText(text) {
@@ -147,7 +147,7 @@
       const selection = window.getSelection()?.toString().trim();
       if (selection) {
         await copyText(selection);
-        return tr('selectionCopied');
+        return { kind: 'textCopied', detail: tr('selectionCopied') };
       }
       message = document.querySelector('main article, article, main, [role="main"]') || document.body;
     }
@@ -181,9 +181,13 @@
     if (generic) clone.querySelectorAll('nav, aside, footer, [role="navigation"]').forEach(el => el.remove());
     const content = md(clone).trim();
     const note = skipped ? tr('skipped', String(skipped)) : '';
-    if (images.length) return (await savePDF(content, images, key)) + note;
+    if (images.length) {
+      const kind = await savePDF(content, images, key);
+      const detail = kind === 'pdfCopied' ? tr(kind, destination) : tr(kind);
+      return { kind, detail: detail + note };
+    }
     await copyText(content);
-    return tr('textCopied', destination) + note;
+    return { kind: 'textCopied', detail: tr('textCopied', destination) + note };
   }
   function messages() {
     if (generic) return [document.body];
@@ -200,19 +204,41 @@
     n.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#222;color:white;padding:12px 18px;border-radius:10px;font:14px system-ui;max-width:85vw;';
     document.body.append(n); setTimeout(() => n.remove(), 6500);
   }
+  const resetTimers = new WeakMap();
+  function setState(button, state) {
+    button.dataset.copyState = state;
+    const caption = state === 'idle' ? label : tr('button_' + state);
+    button.textContent = caption;
+    if (state === 'idle' || state === 'copying') {
+      const indicator = document.createElement('span');
+      indicator.className = state === 'idle' ? 'ai-relay-idle' : 'ai-relay-spinner';
+      if (state === 'idle') indicator.textContent = tr('button_idle');
+      else indicator.setAttribute('aria-hidden', 'true');
+      if (state === 'idle') button.append(indicator);
+      else button.prepend(indicator);
+    }
+    button.disabled = state === 'copying';
+  }
+
   let copying = false;
-  async function copyReply(message, button) {
+  async function copyReply(message, button = message?.querySelector('.' + BUTTON)) {
     if (copying || !message) return;
     copying = true;
-    if (button) button.disabled = true;
+    if (button) {
+      clearTimeout(resetTimers.get(button));
+      setState(button, 'copying');
+    }
     try {
-      notice(await writeReply(message));
+      const result = await writeReply(message);
+      if (button) setState(button, result.kind);
+      notice(result.detail);
     } catch (error) {
       console.warn('Copy to AI', error);
+      if (button) setState(button, 'failed');
       notice(tr('copyFailed'));
     } finally {
       copying = false;
-      if (button) button.disabled = false;
+      if (button) resetTimers.set(button, setTimeout(() => setState(button, 'idle'), 4500));
     }
   }
   function install() {
@@ -220,7 +246,10 @@
       const existing = message.querySelector('.' + BUTTON);
       if (existing) continue;
       const button = document.createElement('button');
-      button.type = 'button'; button.className = BUTTON; button.textContent = label;
+      button.type = 'button'; button.className = BUTTON;
+      button.setAttribute('aria-live', 'polite');
+      button.setAttribute('aria-atomic', 'true');
+      setState(button, 'idle');
       button.title = tr('replyHint');
       button.style.cssText = 'display:inline-flex;align-items:center;margin:8px 0;padding:5px 10px;border:1px solid #ba826d;border-radius:8px;color:inherit;background:transparent;font:inherit;font-size:12px;cursor:pointer;';
       if (generic) {
