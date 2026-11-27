@@ -51,8 +51,6 @@
   }
   const fromClaude = location.hostname === 'claude.ai';
   const generic = !fromClaude && !['chatgpt.com', 'chat.openai.com'].includes(location.hostname);
-  const destination = generic ? 'AI' : fromClaude ? 'ChatGPT' : 'Claude';
-  const label = tr(generic ? 'copyAI' : fromClaude ? 'copyChatGPT' : 'copyClaude');
 
   async function renderImage(img) {
     await img.decode();
@@ -118,15 +116,8 @@
       }
     }
     const encoded = pdf.output('datauristring').split(',')[1];
-    try {
-      const result = await chrome.runtime.sendMessage({type:'AI_RELAY_COPY_PDF', pdf:encoded});
-      if (!result?.ok) console.warn('Copy to AI',result?.error || tr('hostError'));
-      if (result?.ok) return 'pdfCopied';
-    } catch (error) {
-      console.warn('Copy to AI', error);
-    }
-    pdf.save(tr('downloadName') + '-' + Date.now() + '.pdf');
-    return 'downloaded';
+    const result = await chrome.runtime.sendMessage({type:'AI_RELAY_COPY_PDF', pdf:encoded});
+    if (!result?.ok) throw new Error(result?.error || tr('hostError'));
   }
 
   async function copyText(text) {
@@ -147,7 +138,7 @@
       const selection = window.getSelection()?.toString().trim();
       if (selection) {
         await copyText(selection);
-        return { kind: 'textCopied', detail: tr('selectionCopied') };
+        return;
       }
       message = document.querySelector('main article, article, main, [role="main"]') || document.body;
     }
@@ -156,20 +147,12 @@
     const copies = [...clone.querySelectorAll('img')];
     const images = [];
     const key = Array.from(crypto.getRandomValues(new Uint32Array(4))).join('-');
-    let skipped = 0;
     for (const [i, img] of originals.entries()) {
       if (!img.getClientRects().length || img.closest('[aria-hidden="true"], .sr-only')) {
         copies[i].remove();
         continue;
       }
-      let canvas;
-      try {
-        canvas = await renderImage(img);
-      } catch {
-        skipped++;
-        copies[i].replaceWith(img.alt || tr('missingImage'));
-        continue;
-      }
+      const canvas = await renderImage(img);
       const marker = key + '-' + images.length + '-';
       images.push({canvas, marker, alt:img.alt});
       // Images may be wrapped in a zoom button, which the Markdown exporter skips.
@@ -180,14 +163,8 @@
     clone.querySelectorAll('form, input, textarea, select, [contenteditable="true"], [hidden], template, noscript, #ai-relay-notice').forEach(el => el.remove());
     if (generic) clone.querySelectorAll('nav, aside, footer, [role="navigation"]').forEach(el => el.remove());
     const content = md(clone).trim();
-    const note = skipped ? tr('skipped', String(skipped)) : '';
-    if (images.length) {
-      const kind = await savePDF(content, images, key);
-      const detail = kind === 'pdfCopied' ? tr(kind, destination) : tr(kind);
-      return { kind, detail: detail + note };
-    }
-    await copyText(content);
-    return { kind: 'textCopied', detail: tr('textCopied', destination) + note };
+    if (images.length) await savePDF(content, images, key);
+    else await copyText(content);
   }
   function messages() {
     if (generic) return [document.body];
@@ -207,15 +184,12 @@
   const resetTimers = new WeakMap();
   function setState(button, state) {
     button.dataset.copyState = state;
-    const caption = state === 'idle' ? label : tr('button_' + state);
-    button.textContent = caption;
-    if (state === 'idle' || state === 'copying') {
-      const indicator = document.createElement('span');
-      indicator.className = state === 'idle' ? 'ai-relay-idle' : 'ai-relay-spinner';
-      if (state === 'idle') indicator.textContent = tr('button_idle');
-      else indicator.setAttribute('aria-hidden', 'true');
-      if (state === 'idle') button.append(indicator);
-      else button.prepend(indicator);
+    button.textContent = tr('button_' + state);
+    if (state === 'copying') {
+      const spinner = document.createElement('span');
+      spinner.className = 'ai-relay-spinner';
+      spinner.setAttribute('aria-hidden', 'true');
+      button.prepend(spinner);
     }
     button.disabled = state === 'copying';
   }
@@ -229,16 +203,19 @@
       setState(button, 'copying');
     }
     try {
-      const result = await writeReply(message);
-      if (button) setState(button, result.kind);
-      notice(result.detail);
+      document.getElementById('ai-relay-notice')?.remove();
+      await writeReply(message);
+      if (button) {
+        setState(button, 'copied');
+        resetTimers.set(button, setTimeout(() => setState(button, 'idle'), 4500));
+      }
+      notice(tr('pasteHint'));
     } catch (error) {
       console.warn('Copy to AI', error);
       if (button) setState(button, 'failed');
-      notice(tr('copyFailed'));
+      if (!button) notice(tr('button_failed'));
     } finally {
       copying = false;
-      if (button) resetTimers.set(button, setTimeout(() => setState(button, 'idle'), 4500));
     }
   }
   function install() {

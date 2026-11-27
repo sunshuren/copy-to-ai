@@ -1,15 +1,6 @@
 {
   "description": {
-    "message": "复制网页选区或正文到 AI 对话，支持将图文一起导出为 PDF。"
-  },
-  "copyAI": {
-    "message": "复制给 AI"
-  },
-  "copyChatGPT": {
-    "message": "复制到chatgpt"
-  },
-  "copyClaude": {
-    "message": "复制给claude"
+    "message": "一键复制网页或回复，粘贴到其他 AI 对话。"
   },
   "figure": {
     "message": "[图片]"
@@ -28,73 +19,31 @@
   "hostError": {
     "message": "本地助手未确认复制。"
   },
-  "pdfCopied": {
-    "message": "PDF 文件已复制，去 $value$ 按 Ctrl+V 粘贴。",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "downloadName": {
-    "message": "图文回复"
-  },
-  "downloaded": {
-    "message": "PDF 已下载，可将文件拖入对话作为附件。"
-  },
   "empty": {
     "message": "没有可复制的正文。"
   },
   "clipboardError": {
     "message": "无法访问剪贴板。"
   },
-  "selectionCopied": {
-    "message": "已复制选中文字。"
-  },
-  "missingImage": {
-    "message": "[图片未能读取]"
-  },
-  "skipped": {
-    "message": "（$value$ 张图片无法读取）",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "textCopied": {
-    "message": "文字已复制，去 $value$ 按 Ctrl+V 粘贴。",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "copyFailed": {
-    "message": "复制失败，请确认内容已加载后重试。"
-  },
   "replyHint": {
-    "message": "含图时复制 PDF 文件，纯文字时复制正文。"
+    "message": "复制这条回复"
   },
   "pageHint": {
     "message": "复制选中文字，或复制网页正文。"
   },
   "button_idle": {
-    "message": "未复制"
+    "message": "复制回复"
   },
   "button_copying": {
     "message": "复制中…"
   },
-  "button_pdfCopied": {
-    "message": "✓ PDF 已复制"
-  },
-  "button_textCopied": {
-    "message": "✓ 文字已复制"
-  },
-  "button_downloaded": {
-    "message": "↓ 已下载 PDF"
-  },
   "button_failed": {
-    "message": "复制失败 · 重试"
+    "message": "复制失败，重试"
+  },
+  "button_copied": {
+    "message": "✓ 已复制"
+  },
+  "pasteHint": {
+    "message": "可直接粘贴至其他 AI 对话。"
   }
 }

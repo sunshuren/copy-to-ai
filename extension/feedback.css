@@ -3,7 +3,6 @@
   white-space: nowrap;
   transition: background-color 150ms ease, color 150ms ease;
 }
-.ai-relay-idle { font-size: .85em; opacity: .78; }
 .ai-relay-send-button[data-copy-state]:not([data-copy-state="idle"]) {
   color: white !important;
   border-color: transparent !important;
@@ -11,9 +10,7 @@
   font-weight: 600 !important;
 }
 .ai-relay-send-button[data-copy-state="copying"] { background: #194f9b !important; cursor: progress !important; }
-.ai-relay-send-button[data-copy-state="pdfCopied"],
-.ai-relay-send-button[data-copy-state="textCopied"] { background: #176543 !important; }
-.ai-relay-send-button[data-copy-state="downloaded"] { background: #805212 !important; }
+.ai-relay-send-button[data-copy-state="copied"] { background: #176543 !important; }
 .ai-relay-send-button[data-copy-state="failed"] { background: #a52c38 !important; }
 .ai-relay-spinner {
   display: inline-block;
