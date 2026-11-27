@@ -31,9 +31,6 @@
   "pageHint": {
     "message": "Copy the selection or the main content of this page."
   },
-  "button_idle": {
-    "message": "Copy reply"
-  },
   "button_copying": {
     "message": "Copying…"
   },
@@ -45,5 +42,14 @@
   },
   "pasteHint": {
     "message": "You can now paste into another AI chat."
+  },
+  "copyAI": {
+    "message": "Copy to AI"
+  },
+  "copyChatGPT": {
+    "message": "Copy to ChatGPT"
+  },
+  "copyClaude": {
+    "message": "Copy to Claude"
   }
 }

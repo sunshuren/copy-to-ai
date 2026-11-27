@@ -4,7 +4,7 @@
 
 When you paste an article or AI reply into another chat, the images can get left behind. Copy to AI keeps the text and pictures together in reading order.
 
-1. Click **Copy reply** below a reply. On ordinary pages, select text first or copy the main content.
+1. In ChatGPT, click **Copy to Claude**. In Claude, click **Copy to ChatGPT**. On ordinary pages, select text first or copy the main content.
 2. When the button shows **✓ Copied**, paste into Claude or another AI chat with **Ctrl+V**.
 
 The interface follows your browser’s display language. Chinese-language browsers show Chinese labels and messages. English is the fallback. Copied content stays in its original language.
@@ -13,7 +13,7 @@ The interface follows your browser’s display language. Chinese-language browse
 
 1. Download the ZIP attached to the [latest release](https://github.com/sunshuren/copy-to-ai/releases/latest) and extract it, or clone this repository.
 2. Open `edge://extensions` or `chrome://extensions`. Turn on **Developer mode**, choose **Load unpacked**, and select the **extension** folder.
-3. Refresh any tabs that were already open. On ordinary pages, **Copy reply** appears in the lower-right corner. In ChatGPT and Claude, look below the reply you want to copy.
+3. Refresh any tabs that were already open. On ordinary pages, **Copy to AI** appears in the lower-right corner. In ChatGPT and Claude, look below the reply you want to copy.
 
 ## Copy replies with images on Windows
 

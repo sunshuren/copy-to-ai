@@ -184,7 +184,7 @@
   const resetTimers = new WeakMap();
   function setState(button, state) {
     button.dataset.copyState = state;
-    button.textContent = tr('button_' + state);
+    button.textContent = state === 'idle' ? tr(generic ? 'copyAI' : fromClaude ? 'copyChatGPT' : 'copyClaude') : tr('button_' + state);
     if (state === 'copying') {
       const spinner = document.createElement('span');
       spinner.className = 'ai-relay-spinner';

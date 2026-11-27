@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Copy to AI",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "__MSG_description__",
   "permissions": [
     "clipboardWrite",
@@ -13,7 +13,7 @@
     "http://*/*"
   ],
   "action": {
-    "default_title": "__MSG_button_idle__"
+    "default_title": "__MSG_copyAI__"
   },
   "background": {
     "service_worker": "background.js"

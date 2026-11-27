@@ -31,9 +31,6 @@
   "pageHint": {
     "message": "复制选中文字，或复制网页正文。"
   },
-  "button_idle": {
-    "message": "复制回复"
-  },
   "button_copying": {
     "message": "复制中…"
   },
@@ -45,5 +42,14 @@
   },
   "pasteHint": {
     "message": "可直接粘贴至其他 AI 对话。"
+  },
+  "copyAI": {
+    "message": "复制给 AI"
+  },
+  "copyChatGPT": {
+    "message": "复制到chatgpt"
+  },
+  "copyClaude": {
+    "message": "复制给claude"
   }
 }
