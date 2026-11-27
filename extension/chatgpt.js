@@ -143,21 +143,46 @@
       message = document.querySelector('main article, article, main, [role="main"]') || document.body;
     }
     const clone = message.cloneNode(true);
-    const originals = [...message.querySelectorAll('img')];
-    const copies = [...clone.querySelectorAll('img')];
+    const components = ['card', 'table', 'grid', 'svg'];
+    const selector = ['img'];
+    if (!generic && !fromClaude) {
+      selector.push(...components.map(name => `[data-dil-response] [data-d-component="${name}"]`));
+    }
+    const originals = [...message.querySelectorAll(selector.join(','))];
+    const copies = [...clone.querySelectorAll(selector.join(','))];
     const images = [];
     const key = Array.from(crypto.getRandomValues(new Uint32Array(4))).join('-');
-    for (const [i, img] of originals.entries()) {
-      if (!img.getClientRects().length || img.closest('[aria-hidden="true"], .sr-only')) {
+    for (const [i, element] of originals.entries()) {
+      // Descendants of a captured card or table are already in its image.
+      if (!clone.contains(copies[i])) continue;
+      if (!element.getClientRects().length || element.closest('[aria-hidden="true"], .sr-only, [hidden]')) {
         copies[i].remove();
         continue;
       }
-      const canvas = await renderImage(img);
+      let canvas;
+      if (element.tagName === 'IMG') {
+        canvas = await renderImage(element);
+      } else {
+        let ancestor = element.parentElement;
+        let backgroundColor = 'white';
+        while (ancestor) {
+          const color = getComputedStyle(ancestor).backgroundColor;
+          if (color !== 'rgba(0, 0, 0, 0)' && color !== 'transparent') {
+            backgroundColor = color;
+            break;
+          }
+          ancestor = ancestor.parentElement;
+        }
+        canvas = await modernScreenshot.domToCanvas(element, {scale: 1.5, font: false});
+        const context = canvas.getContext('2d');
+        context.globalCompositeOperation = 'destination-over';
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }
       const marker = key + '-' + images.length + '-';
-      images.push({canvas, marker, alt:img.alt});
-      // Images may be wrapped in a zoom button, which the Markdown exporter skips.
+      images.push({canvas, marker});
       const wrapper = copies[i].closest('button');
-      if (wrapper && wrapper.querySelectorAll('img').length === 1) wrapper.replaceWith(marker);
+      if (wrapper && wrapper.querySelectorAll(selector.join(',')).length === 1) wrapper.replaceWith(marker);
       else copies[i].replaceWith(marker);
     }
     clone.querySelectorAll('form, input, textarea, select, [contenteditable="true"], [hidden], template, noscript, #ai-relay-notice').forEach(el => el.remove());

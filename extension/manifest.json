@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Copy to AI",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "__MSG_description__",
   "permissions": [
     "clipboardWrite",
@@ -26,6 +26,7 @@
       ],
       "js": [
         "jspdf.js",
+        "modern-screenshot.js",
         "chatgpt.js"
       ],
       "run_at": "document_idle",
