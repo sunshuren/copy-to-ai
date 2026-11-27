@@ -191,6 +191,12 @@
       spinner.setAttribute('aria-hidden', 'true');
       button.prepend(spinner);
     }
+    if (state === 'copied') {
+      const hint = document.createElement('span');
+      hint.className = 'ai-relay-paste-hint';
+      hint.textContent = tr('pasteHint');
+      button.append(hint);
+    }
     button.disabled = state === 'copying';
   }
 
@@ -209,7 +215,7 @@
         setState(button, 'copied');
         resetTimers.set(button, setTimeout(() => setState(button, 'idle'), 4500));
       }
-      notice(tr('pasteHint'));
+
     } catch (error) {
       console.warn('Copy to AI', error);
       if (button) setState(button, 'failed');
@@ -242,6 +248,7 @@
   }
   chrome.runtime.onMessage.addListener((msg, sender, reply) => {
     if (sender.id !== chrome.runtime.id || msg?.type !== 'AI_RELAY_LATEST') return;
+    install();
     copyReply(messages().at(-1)); reply({accepted:true});
   });
   let scheduled = false;

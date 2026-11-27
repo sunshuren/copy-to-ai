@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Copy to AI",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "__MSG_description__",
   "permissions": [
     "clipboardWrite",

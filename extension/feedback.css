@@ -10,7 +10,16 @@
   font-weight: 600 !important;
 }
 .ai-relay-send-button[data-copy-state="copying"] { background: #194f9b !important; cursor: progress !important; }
-.ai-relay-send-button[data-copy-state="copied"] { background: #176543 !important; }
+.ai-relay-send-button[data-copy-state="copied"] {
+  background: #176543 !important;
+  max-width: min(100%, calc(100vw - 36px));
+  box-sizing: border-box;
+}
+.ai-relay-paste-hint {
+  font-weight: 400;
+  white-space: normal;
+  text-align: start;
+}
 .ai-relay-send-button[data-copy-state="failed"] { background: #a52c38 !important; }
 .ai-relay-spinner {
   display: inline-block;
