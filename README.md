@@ -1,37 +1,41 @@
-# Copy to AI · 复制给 AI
+# Copy to AI
 
-浏览网页时，点一次复制，在 AI 对话里手动粘贴。
+**English** · [简体中文](README.zh-CN.md)
 
-| 页面 | 按钮 | 复制范围 |
+When you paste a web article or an AI reply into another chat, the text often comes through while the images get left behind. You end up attaching each image separately and explaining where it belongs. Copy to AI keeps the text and images in order in a single PDF you can attach to the conversation. For text-only content, one click copies it to the clipboard.
+
+| Where you are | Button | What it copies |
 | --- | --- | --- |
-| 普通网页 | 复制给 AI | 选中文字时只复制选区，否则复制文章或页面主体 |
-| ChatGPT | 复制给claude | 按钮所在的助手回复 |
-| Claude | 复制到chatgpt | 按钮所在的助手回复 |
+| Any supported web page | Copy to AI | Your selected text, or the main content if nothing is selected |
+| ChatGPT | Copy to Claude | The assistant reply above the button |
+| Claude | Copy to ChatGPT | The assistant reply above the button |
 
-纯文字直接进剪贴板。含可读取图片的正文会生成 PDF，保持图文顺序。装好 Windows 助手后，到支持粘贴文件的输入框按 **Ctrl+V** 即可添加 PDF 附件。没有安装助手时，扩展会下载 PDF，供手动拖入对话。
+The interface follows your browser’s display language. Chinese-language browsers show Chinese labels and messages. English is the fallback. Copied content stays in its original language.
 
-## 安装浏览器扩展
+## Install in Edge or Chrome
 
-1. 从 [Releases](https://github.com/sunshuren/copy-to-ai/releases) 下载 ZIP 并解压，或克隆本仓库。
-2. 在 Edge 打开 `edge://extensions`，在 Chrome 打开 `chrome://extensions`。打开开发者模式，选择「加载已解压的扩展程序」，选解压目录中的 **extension** 文件夹。
-3. 刷新原先打开的网页。普通网页的「复制给 AI」在右下角。浏览器内置页面、扩展商店和浏览器限制注入的页面不支持此按钮。
+1. Download the ZIP attached to the [latest release](https://github.com/sunshuren/copy-to-ai/releases/latest) and extract it, or clone this repository.
+2. Open `edge://extensions` or `chrome://extensions`. Turn on **Developer mode**, choose **Load unpacked**, and select the **extension** folder.
+3. Refresh any tabs that were already open. On ordinary pages, **Copy to AI** appears in the lower-right corner. In ChatGPT and Claude, look below the reply you want to copy.
 
-## Windows 文件粘贴（可选）
+## Paste a PDF as a file on Windows
 
-从扩展管理页复制 Copy to AI 的 32 位扩展 ID。在解压目录打开 PowerShell，运行下列命令，把示例的占位文字换成实际 ID。Chrome 用户把 Edge 换成 Chrome。
+By default, the extension downloads the PDF so you can drag it into a chat. Install the optional clipboard helper to paste the PDF directly with **Ctrl+V** in apps that accept file attachments from the clipboard.
+
+Copy the 32-character extension ID from the browser’s extensions page. Open PowerShell in the extracted folder and run the command below with your ID. For Chrome, replace `Edge` with `Chrome`.
 
 ```powershell
-.\windows\install.ps1 -ExtensionId '你的扩展ID' -Browser Edge
+.\windows\install.ps1 -ExtensionId 'YOUR_EXTENSION_ID' -Browser Edge
 ```
 
-安装脚本使用 Windows 自带的 .NET Framework C# 编译器，为当前用户注册本地助手。助手仅接受指定扩展发来的 PDF。每次点击会把文件保存在 `%LOCALAPPDATA%\AI Relay\PDF`，再把文件写入剪贴板。文件可以在粘贴完成后自行清理。
+The installer uses the Windows .NET Framework C# compiler and registers the helper for the current user. The helper accepts PDFs from the specified extension and stores them in `%LOCALAPPDATA%\AI Relay\PDF`. You can remove these files after pasting.
 
-## 支持范围
+## Page access and supported content
 
-扩展需要在普通 HTTP 和 HTTPS 页面上显示按钮，因此安装时浏览器会请求网站访问权限。点击后在本机提取内容，不需要 AI 账号、API Key 或远程中转服务。扩展不打开 AI 页面，也不代为发送消息。
+The extension requests access to HTTP and HTTPS pages so it can display the copy button. It processes the content locally when you click. No AI account or API key is required, and the extension never sends a chat message on your behalf.
 
-普通页面优先取文章或 main 区域，没有时读取页面主体并忽略导航、侧栏、页脚和表单。跨域访问受限或加载失败的图片可能无法导出，复制提示会显示数量。选区按纯文本处理。交互画布、视频和嵌套网页的内容不在图文导出范围内。桌面客户端是否接受 PDF 粘贴取决于其输入框，可用下载文件作为附件。
+Selections are copied as plain text. For full pages, the extension looks for an article or main region, then falls back to the page body. It skips navigation, sidebars, footers, and forms. Images that fail to load or cannot be read across origins may be omitted; the copy notification reports the count. Interactive canvases, videos, and embedded pages are outside the export scope. Browser settings pages and extension stores restrict extension buttons.
 
-## 许可证
+## License
 
-项目代码采用 MIT 许可证。内置 jsPDF 4.2.1 的许可证见 extension/jspdf-LICENSE.txt。reply.ttf 是从 Google Fonts 的 Noto Sans SC 可变字体生成的常规字重静态字体，采用 SIL Open Font License 1.1，见 extension/font-LICENSE.txt。两个依赖均随扩展提供，运行时不从 CDN 加载。
+Project code is available under the [MIT License](LICENSE). The extension bundles [jsPDF 4.2.1](extension/jspdf-LICENSE.txt) and a regular-weight static font derived from Noto Sans SC, distributed under the [SIL Open Font License 1.1](extension/font-LICENSE.txt). Both are included locally.

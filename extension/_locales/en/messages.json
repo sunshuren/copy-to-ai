@@ -1,0 +1,82 @@
+{
+  "description": {
+    "message": "Copy selected text or page content for an AI chat. Export text and images together as a PDF."
+  },
+  "copyAI": {
+    "message": "Copy to AI"
+  },
+  "copyChatGPT": {
+    "message": "Copy to ChatGPT"
+  },
+  "copyClaude": {
+    "message": "Copy to Claude"
+  },
+  "figure": {
+    "message": "[Image]"
+  },
+  "figureAlt": {
+    "message": "[Image: $value$]",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "fontError": {
+    "message": "Could not load the PDF font."
+  },
+  "hostError": {
+    "message": "The clipboard helper did not confirm the copy."
+  },
+  "pdfCopied": {
+    "message": "PDF copied. Press Ctrl+V in $value$ to attach it.",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "downloadName": {
+    "message": "Copy-to-AI"
+  },
+  "downloaded": {
+    "message": "PDF downloaded. Drag the file into your chat to attach it."
+  },
+  "empty": {
+    "message": "No text to copy."
+  },
+  "clipboardError": {
+    "message": "Clipboard unavailable."
+  },
+  "selectionCopied": {
+    "message": "Selected text copied."
+  },
+  "missingImage": {
+    "message": "[Image unavailable]"
+  },
+  "skipped": {
+    "message": " (Images skipped: $value$.)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "textCopied": {
+    "message": "Text copied. Press Ctrl+V in $value$ to paste.",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "copyFailed": {
+    "message": "Copy failed. Check that the content has loaded and try again."
+  },
+  "replyHint": {
+    "message": "Copy text, or copy a PDF if the reply contains images."
+  },
+  "pageHint": {
+    "message": "Copy the selection or the main content of this page."
+  }
+}

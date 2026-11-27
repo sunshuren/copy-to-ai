@@ -1,6 +1,7 @@
 (() => {
   if (globalThis.__aiRelayInstalled) return;
   globalThis.__aiRelayInstalled = true;
+  const tr = (key, value) => chrome.i18n.getMessage(key, value);
   const BUTTON = 'ai-relay-send-button';
   const ignored = 'button, script, style, svg, [aria-hidden="true"], .sr-only, .not-prose button';
   function md(node, listDepth = 0) {
@@ -23,7 +24,7 @@
     if (tag === 'strong' || tag === 'b') return '**' + children() + '**';
     if (tag === 'em' || tag === 'i') return '*' + children() + '*';
     if (tag === 'a') {const t = children(); const href = node.getAttribute('href'); return href && /^https?:/i.test(node.href) ? `[${t}](${node.href})` : t;}
-    if (tag === 'img') return node.alt ? `[图片：${node.alt}]` : '[图片]';
+    if (tag === 'img') return node.alt ? tr('figureAlt', node.alt) : tr('figure');
     if (tag === 'blockquote') return '\n\n' + children().trim().split('\n').map(l => '> ' + l).join('\n') + '\n\n';
     if (tag === 'ul' || tag === 'ol') {
       let i = Number(node.getAttribute('start')) || 1;
@@ -51,7 +52,7 @@
   const fromClaude = location.hostname === 'claude.ai';
   const generic = !fromClaude && !['chatgpt.com', 'chat.openai.com'].includes(location.hostname);
   const destination = generic ? 'AI' : fromClaude ? 'ChatGPT' : 'Claude';
-  const label = generic ? '复制给 AI' : fromClaude ? '复制到chatgpt' : '复制给claude';
+  const label = tr(generic ? 'copyAI' : fromClaude ? 'copyChatGPT' : 'copyClaude');
 
   async function renderImage(img) {
     await img.decode();
@@ -77,7 +78,7 @@
 
   async function savePDF(content, images, key) {
     const response = await fetch(chrome.runtime.getURL('reply.ttf'));
-    if (!response.ok) throw new Error('字体加载失败');
+    if (!response.ok) throw new Error(tr('fontError'));
     const font = await response.blob();
     const fontData = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -119,17 +120,17 @@
     const encoded = pdf.output('datauristring').split(',')[1];
     try {
       const result = await chrome.runtime.sendMessage({type:'AI_RELAY_COPY_PDF', pdf:encoded});
-      if (!result?.ok) console.warn('Copy to AI',result?.error || '本地助手未确认复制');
-      if (result?.ok) return 'PDF 文件已复制，去 ' + destination + ' 按 Ctrl+V 粘贴。';
+      if (!result?.ok) console.warn('Copy to AI',result?.error || tr('hostError'));
+      if (result?.ok) return tr('pdfCopied', destination);
     } catch (error) {
       console.warn('Copy to AI', error);
     }
-    pdf.save('ChatGPT-图文回复-' + Date.now() + '.pdf');
-    return 'PDF 未写入剪贴板，已改为下载，可作为附件拖入对话。';
+    pdf.save(tr('downloadName') + '-' + Date.now() + '.pdf');
+    return tr('downloaded');
   }
 
   async function copyText(text) {
-    if (!text.trim()) throw new Error('没有可复制的正文');
+    if (!text.trim()) throw new Error(tr('empty'));
     if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
     const field = document.createElement('textarea');
     field.value = text;
@@ -137,7 +138,7 @@
     document.body.append(field);
     try {
       field.select();
-      if (!document.execCommand('copy')) throw new Error('无法访问剪贴板');
+      if (!document.execCommand('copy')) throw new Error(tr('clipboardError'));
     } finally { field.remove(); }
   }
 
@@ -146,7 +147,7 @@
       const selection = window.getSelection()?.toString().trim();
       if (selection) {
         await copyText(selection);
-        return '已复制选中文字';
+        return tr('selectionCopied');
       }
       message = document.querySelector('main article, article, main, [role="main"]') || document.body;
     }
@@ -166,7 +167,7 @@
         canvas = await renderImage(img);
       } catch {
         skipped++;
-        copies[i].replaceWith(img.alt || '[图片未能读取]');
+        copies[i].replaceWith(img.alt || tr('missingImage'));
         continue;
       }
       const marker = key + '-' + images.length + '-';
@@ -179,10 +180,10 @@
     clone.querySelectorAll('form, input, textarea, select, [contenteditable="true"], [hidden], template, noscript, #ai-relay-notice').forEach(el => el.remove());
     if (generic) clone.querySelectorAll('nav, aside, footer, [role="navigation"]').forEach(el => el.remove());
     const content = md(clone).trim();
-    const note = skipped ? '（' + skipped + ' 张图片无法读取）' : '';
+    const note = skipped ? tr('skipped', String(skipped)) : '';
     if (images.length) return (await savePDF(content, images, key)) + note;
     await copyText(content);
-    return '已复制回复文字，去 ' + destination + ' 按 Ctrl+V 粘贴。' + note;
+    return tr('textCopied', destination) + note;
   }
   function messages() {
     if (generic) return [document.body];
@@ -208,7 +209,7 @@
       notice(await writeReply(message));
     } catch (error) {
       console.warn('Copy to AI', error);
-      notice('复制失败，请确认图片已加载后重试。');
+      notice(tr('copyFailed'));
     } finally {
       copying = false;
       if (button) button.disabled = false;
@@ -220,11 +221,11 @@
       if (existing) continue;
       const button = document.createElement('button');
       button.type = 'button'; button.className = BUTTON; button.textContent = label;
-      button.title = '含图时复制 PDF 文件，纯文字时复制正文';
+      button.title = tr('replyHint');
       button.style.cssText = 'display:inline-flex;align-items:center;margin:8px 0;padding:5px 10px;border:1px solid #ba826d;border-radius:8px;color:inherit;background:transparent;font:inherit;font-size:12px;cursor:pointer;';
       if (generic) {
         button.style.cssText += 'position:fixed;right:18px;bottom:18px;z-index:2147483646;color:#fff;background:#333;padding:8px 14px;';
-        button.title = '复制选中文字，或复制网页正文';
+        button.title = tr('pageHint');
         button.addEventListener('mousedown', event => event.preventDefault());
       }
       button.addEventListener('click', event => {

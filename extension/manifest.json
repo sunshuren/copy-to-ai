@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Copy to AI",
-  "version": "0.6.1",
-  "description": "复制网页选中文字或正文。含图内容可导出 PDF，支持手动粘贴给 AI。",
+  "version": "0.7.0",
+  "description": "__MSG_description__",
   "permissions": [
     "clipboardWrite",
     "scripting",
@@ -13,7 +13,7 @@
     "http://*/*"
   ],
   "action": {
-    "default_title": "复制给 AI"
+    "default_title": "__MSG_copyAI__"
   },
   "background": {
     "service_worker": "background.js"
@@ -41,5 +41,6 @@
         "http://*/*"
       ]
     }
-  ]
+  ],
+  "default_locale": "en"
 }

@@ -1,0 +1,82 @@
+{
+  "description": {
+    "message": "複製網頁選取的文字或主要內容到 AI 對話，支援將圖文一起匯出為 PDF。"
+  },
+  "copyAI": {
+    "message": "複製給 AI"
+  },
+  "copyChatGPT": {
+    "message": "複製到 ChatGPT"
+  },
+  "copyClaude": {
+    "message": "複製給 Claude"
+  },
+  "figure": {
+    "message": "[圖片]"
+  },
+  "figureAlt": {
+    "message": "[圖片：$value$]",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "fontError": {
+    "message": "無法載入 PDF 字型。"
+  },
+  "hostError": {
+    "message": "本機助手未確認複製。"
+  },
+  "pdfCopied": {
+    "message": "已複製 PDF 檔案，到 $value$ 按 Ctrl+V 貼上。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "downloadName": {
+    "message": "圖文回覆"
+  },
+  "downloaded": {
+    "message": "已下載 PDF，可將檔案拖入對話作為附件。"
+  },
+  "empty": {
+    "message": "沒有可複製的文字。"
+  },
+  "clipboardError": {
+    "message": "無法存取剪貼簿。"
+  },
+  "selectionCopied": {
+    "message": "已複製選取的文字。"
+  },
+  "missingImage": {
+    "message": "[無法讀取圖片]"
+  },
+  "skipped": {
+    "message": "（無法讀取 $value$ 張圖片）",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "textCopied": {
+    "message": "已複製文字，到 $value$ 按 Ctrl+V 貼上。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "copyFailed": {
+    "message": "複製失敗，請確認內容已載入後再試一次。"
+  },
+  "replyHint": {
+    "message": "回覆含圖時複製 PDF 檔案，純文字時複製文字。"
+  },
+  "pageHint": {
+    "message": "複製選取的文字或網頁主要內容。"
+  }
+}
